@@ -11,7 +11,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "EglobalOneLab\\WhatsappIntegration\\WhatsappIntegrationServiceProvider"
+                "EglobalOneLab\\WhatsappIntegration\\WhatsappIntegrationProvider"
             ]
         }
     },
@@ -21,7 +21,7 @@
             "email": "ivangarcilazo.dv@gmail.com"
         }
     ],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "require": {
         "php": "^8.2",
         "guzzlehttp/guzzle": "^7.9",
