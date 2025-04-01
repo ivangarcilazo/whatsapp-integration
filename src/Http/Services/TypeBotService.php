@@ -1,9 +1,9 @@
 <?php
 
-namespace Eglobal\WhatsappIntegration\Http\Services;
+namespace EglobalOneLab\WhatsappIntegration\Http\Services;
 
-use Eglobal\WhatsappIntegration\Models\WhatsappHistory;
-use Eglobal\WhatsappIntegration\Models\WhatsappIntegration;
+use EglobalOneLab\WhatsappIntegration\Models\WhatsappHistory;
+use EglobalOneLab\WhatsappIntegration\Models\WhatsappIntegration;
 use Exception;
 use GuzzleHttp\Client;
 

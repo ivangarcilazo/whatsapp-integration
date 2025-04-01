@@ -1,6 +1,6 @@
 <?php
 
-namespace Eglobal\WhatsappIntegration;
+namespace EglobalOneLab\WhatsappIntegration;
 
 use Illuminate\Support\ServiceProvider;
 

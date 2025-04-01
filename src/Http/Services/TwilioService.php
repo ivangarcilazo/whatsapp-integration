@@ -1,6 +1,6 @@
 <?php
 
-namespace Eglobal\WhatsappIntegration\Http\Services;
+namespace EglobalOneLab\WhatsappIntegration\Http\Services;
 
 use Exception;
 use Illuminate\Support\Facades\Log;

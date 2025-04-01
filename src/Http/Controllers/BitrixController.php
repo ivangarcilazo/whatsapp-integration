@@ -1,10 +1,9 @@
 <?php
 
-namespace Eglobal\WhatsappIntegration\Http\Controllers;
+namespace EglobalOneLab\WhatsappIntegration\Http\Controllers;
 
-use Eglobal\WhatsappIntegration\Http\Services\BitrixService;
-use Eglobal\WhatsappIntegration\Models\WhatsappHistory;
-use Eglobal\WhatsappIntegration\Models\WhatsappIntegration;
+use EglobalOneLab\WhatsappIntegration\Http\Services\BitrixService;
+use EglobalOneLab\WhatsappIntegration\Models\WhatsappHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Eglobal\WhatsappIntegration\Models;
+namespace EglobalOneLab\WhatsappIntegration\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
