@@ -1,17 +1,17 @@
 {
-    "name": "eglobal/whatsapp-integration",
+    "name": "eglobal-one-lab/whatsapp-integration",
     "description": "Messaging integration with TypeBot, Bitrix and Twilio",
     "type": "library",
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Eglobal\\WhatsappIntegration\\": "src/"
+            "EglobalOneLab\\WhatsappIntegration\\": "src/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Eglobal\\WhatsappIntegration\\WhatsappIntegrationServiceProvider"
+                "EglobalOneLab\\WhatsappIntegration\\WhatsappIntegrationServiceProvider"
             ]
         }
     },
