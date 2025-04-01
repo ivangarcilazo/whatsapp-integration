@@ -7,6 +7,7 @@ use EglobalOneLab\WhatsappIntegration\Models\WhatsappHistory;
 use EglobalOneLab\WhatsappIntegration\Models\WhatsappIntegration;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Exception;
 
 class BitrixController
 {
@@ -43,5 +44,9 @@ class BitrixController
                 throw new Exception($e->getMessage());
             }
         }
+
+        $integrationRecord = WhatsappIntegration::where('whatsapp_id', $phone)->first();
+
+        $integrationRecord->delete();
     }
 }

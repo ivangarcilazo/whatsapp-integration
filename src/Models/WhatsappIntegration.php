@@ -8,6 +8,9 @@ class WhatsappIntegration extends Model
 {
     //
     protected $table = 'eg1_whatsapp_integration';
+    protected $primaryKey = 'whatsapp_id'; 
+    public $incrementing = false; 
+    protected $keyType = 'string'; 
 
     protected $fillable = [
         'whatsapp_id',
