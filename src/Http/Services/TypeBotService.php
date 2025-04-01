@@ -31,6 +31,11 @@ class TypeBotService
         }
 
         $typeBot = config('whatsapp-integration.typebot.typeboy_id');
+
+        if (!$typeBot) {
+            throw new Exception('You must be add typeboy ID for start a chat');
+        }
+
         return "https://typebot-view.eg1lab.com/api/v1/typebots/$typeBot/startChat";
     }
 
@@ -89,7 +94,7 @@ class TypeBotService
 
             $this->responseMessage();
         } catch (Exception $e) {
-            
+
             if ($e->getCode() == 404) {
                 // Handler messages when chatbot is finished
                 $bitrix = new BitrixService();

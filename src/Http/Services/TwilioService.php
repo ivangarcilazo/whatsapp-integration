@@ -10,11 +10,16 @@ class TwilioService
 {
 
     protected $twilio;
-    protected $ownNumber = config('whatsapp-integration.twilio.phone_number');
+    protected $ownNumber = '';
 
     public function __construct()
     {
 
+        if (!config('whatsapp-integration.twilio.phone_number') || !config('whatsapp-integration.twilio.sid') || !config('whatsapp-integration.twilio.auth')) {
+            throw new Exception('You must set the phone number, sid and auth in the config file');
+        }
+
+        $this->ownNumber = config('whatsapp-integration.twilio.phone_number');
         $this->twilio = new Client(config('whatsapp-integration.twilio.sid'), config('whatsapp-integration.twilio.auth'));
     }
 

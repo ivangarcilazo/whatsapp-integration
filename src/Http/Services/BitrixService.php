@@ -9,6 +9,12 @@ use Illuminate\Support\Facades\Log;
 class BitrixService
 {
 
+    public function __construct()
+    {
+        if (!config('whatsapp-integration.bitrix.key')) {
+            throw new Exception('You must set the bitrix key in the config file');
+        }
+    }
 
     public function sendMessage($form_params = null)
     {
