@@ -1,0 +1,30 @@
+{
+    "name": "eglobal/whatsapp-integration",
+    "description": "Messaging integration with TypeBot, Bitrix and Twilio",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Eglobal\\WhatsappIntegration\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Eglobal\\WhatsappIntegration\\WhatsappIntegrationServiceProvider"
+            ]
+        }
+    },
+    "authors": [
+        {
+            "name": "Ivan Lautaro Garcilazo",
+            "email": "ivangarcilazo.dv@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": "^8.2",
+        "guzzlehttp/guzzle": "^7.9",
+        "twilio/sdk": "^8.4"
+    }
+}
