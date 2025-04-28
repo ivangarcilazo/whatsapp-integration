@@ -45,8 +45,8 @@ class BitrixController
             }
         }
 
-        $integrationRecord = WhatsappIntegration::where('whatsapp_id', $phone)->first();
+        // $integrationRecord = WhatsappIntegration::where('whatsapp_id', $phone)->first();
 
-        $integrationRecord->delete();
+        // $integrationRecord->delete();
     }
 }
