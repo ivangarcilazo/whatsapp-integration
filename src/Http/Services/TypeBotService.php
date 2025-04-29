@@ -6,6 +6,7 @@ use EglobalOneLab\WhatsappIntegration\Models\WhatsappHistory;
 use EglobalOneLab\WhatsappIntegration\Models\WhatsappIntegration;
 use Exception;
 use GuzzleHttp\Client;
+use Psr\Http\Message\StreamInterface;
 
 class TypeBotService
 {
@@ -40,9 +41,9 @@ class TypeBotService
     }
 
     /**
-     * Save data from user
+     * Save data from user if not exist
      */
-    public function saveRecord()
+    public function saveRecordIfNotExist()
     {
         if (!$this->user) {
             WhatsappIntegration::create([
@@ -65,34 +66,20 @@ class TypeBotService
     }
 
     /**
-     * Send message to TypeBot system.
-     * This create a new chat or continue old chat
+     * General message management 
+     *  - Send message to TypeBot system.
+     *  - Create a new chat or continue old chat
      */
     public function sendMessage()
     {
-        $client = new Client();
-
-        $url = $this->getUrl();
-
         try {
+            $this->response = json_decode($this->getResponseTypebot(), true);
 
-            $response = $client->post($url, [
-                'headers' => [
-                    'Content-Type' => 'application/json'
-                ],
-                'json' => [
-                    'message' => $_POST['Body']
-                ]
-            ]);
+            $this->saveRecordIfNotExist();
 
-            $this->response = json_decode($response->getBody(), true);
-
-            $this->saveRecord();
-
-            // Save history from messages of user
             $this->saveHistory();
 
-            $this->responseMessage();
+            $this->responseUserTypebot();
         } catch (Exception $e) {
 
             if ($e->getCode() == 404) {
@@ -111,7 +98,7 @@ class TypeBotService
      * Send a response to user with twilio and save history for bitrix
      * @return void
      */
-    public function responseMessage()
+    public function responseUserTypebot()
     {
         $messages = $this->parsedResponse();
 
@@ -186,5 +173,42 @@ class TypeBotService
         }
 
         return $messages;
+    }
+
+    /**
+     * Get response from typebot sending user message
+     */
+    protected function getResponseTypebot(): StreamInterface
+    {
+
+        $client = new Client();
+
+        $url = $this->getUrl();
+
+        $response = $client->post($url, [
+            'headers' => [
+                'Content-Type' => 'application/json'
+            ],
+            'json' => [
+                'message' => $_POST['Body']
+            ]
+        ]);
+
+        // TODO: separate logic and improve (i have a headache rn)
+        // Intercept response from typebot for response backend data or handling data avoiding user input
+        if (str_contains((string)$response->getBody(), 'get_phone_number')) {
+
+            $response = $client->post($url, [
+                'headers' => [
+                    'Content-Type' => 'application/json'
+                ],
+                'json' => [
+                    'message' => $_POST['WaId']
+                ]
+            ]);
+            return $response->getBody();
+        }
+
+        return $response->getBody();
     }
 }
