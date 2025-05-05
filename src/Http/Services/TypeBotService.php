@@ -114,6 +114,8 @@ class TypeBotService
 
             // Save chatbot messages for send to bitrix
             $this->saveHistory($postCopy);
+
+            sleep(.5);
         }
     }
 
