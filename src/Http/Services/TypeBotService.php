@@ -81,15 +81,6 @@ class TypeBotService
 
             $this->responseUserTypebot();
         } catch (Exception $e) {
-
-            if ($e->getCode() == 404) {
-                // Handler messages when chatbot is finished
-                $bitrix = new BitrixService();
-                $bitrix->sendMessage();
-
-                return;
-            }
-
             throw new Exception($e->getMessage());
         }
     }
@@ -101,6 +92,11 @@ class TypeBotService
     public function responseUserTypebot()
     {
         $messages = $this->parsedResponse();
+
+        if (empty($messages)) {
+            $this->handleEmptyResponse();
+            return;
+        }
 
         $twilio = new TwilioService();
 
@@ -117,6 +113,16 @@ class TypeBotService
 
             sleep(.5);
         }
+    }
+
+    /**
+     * Handle empty response from typebot sending user message to bitrix
+     * @return  void
+     */
+    public function handleEmptyResponse()
+    {
+        $bitrix = new BitrixService();
+        $bitrix->sendMessage();
     }
 
     /**
