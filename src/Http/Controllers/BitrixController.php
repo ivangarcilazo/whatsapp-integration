@@ -29,14 +29,8 @@ class BitrixController
             try {
                 collect($records)->each(function (WhatsappHistory $record) use ($bitrix) {
                     $bitrix->sendMessage($record->messages);
-                    sleep(.5);
+                    usleep(500000); //pause 5ms
                 });
-
-                WhatsappHistory::whereIn('id', $records->pluck('id'))->delete();
-
-                $integrationRecord = WhatsappIntegration::where('whatsapp_id', $phone)->firstOrFail();
-
-                $integrationRecord->delete();
             } catch (Exception $e) {
 
                 Log::error('Error sending message on bitrix:' . $e->getMessage());
