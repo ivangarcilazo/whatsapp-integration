@@ -6,6 +6,7 @@ use EglobalOneLab\WhatsappIntegration\Models\WhatsappHistory;
 use EglobalOneLab\WhatsappIntegration\Models\WhatsappIntegration;
 use Exception;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Log;
 use Psr\Http\Message\StreamInterface;
 
 class TypeBotService
@@ -74,6 +75,11 @@ class TypeBotService
     {
         try {
             $this->response = json_decode($this->getResponseTypebot(), true);
+            //If not returns messages from typebot
+            if (empty($this->response['messages'])) {
+                $this->handleEmptyResponse();
+                return;
+            }
 
             $this->saveRecordIfNotExist();
 
@@ -81,7 +87,13 @@ class TypeBotService
 
             $this->responseUserTypebot();
         } catch (Exception $e) {
-            throw new Exception($e->getMessage());
+
+            if (str_contains($e->getMessage(), 'Session not found')) {
+                $this->handleEmptyResponse();
+                return;
+            }
+
+            Log::error($e->getMessage());
         }
     }
 
@@ -92,11 +104,6 @@ class TypeBotService
     public function responseUserTypebot()
     {
         $messages = $this->parsedResponse();
-
-        if (empty($messages)) {
-            $this->handleEmptyResponse();
-            return;
-        }
 
         $twilio = new TwilioService();
 
@@ -135,6 +142,8 @@ class TypeBotService
         }
 
         $messages = [];
+
+
 
         if ($this->user) {
 
