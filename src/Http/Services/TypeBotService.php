@@ -47,7 +47,7 @@ class TypeBotService
     public function saveRecordIfNotExist()
     {
         if (!$this->user) {
-            WhatsappIntegration::create([
+            $this->user =  WhatsappIntegration::create([
                 'whatsapp_id' => $_POST['WaId'],
                 'typebot_session_id' => $this->response['sessionId']
             ]);
@@ -74,7 +74,8 @@ class TypeBotService
     public function sendMessage()
     {
         try {
-            $this->response = json_decode($this->getResponseTypebot(), true);
+            $this->getResponseTypebot();
+
             //If not returns messages from typebot
             if (empty($this->response['messages'])) {
                 $this->handleEmptyResponse();
@@ -93,7 +94,12 @@ class TypeBotService
                 return;
             }
 
-            Log::error($e->getMessage());
+            Log::error(
+                $e->getMessage(),
+                [
+                    'trace' => $e->getTraceAsString()
+                ]
+            );
         }
     }
 
@@ -195,14 +201,14 @@ class TypeBotService
     /**
      * Get response from typebot sending user message
      */
-    protected function getResponseTypebot(): StreamInterface
+    protected function getResponseTypebot(): void
     {
 
         $client = new Client();
 
         $url = $this->getUrl();
 
-        $response = $client->post($url, [
+        $clientResponse = $client->post($url, [
             'headers' => [
                 'Content-Type' => 'application/json'
             ],
@@ -211,11 +217,22 @@ class TypeBotService
             ]
         ]);
 
-        // TODO: separate logic and improve (i have a headache rn)
-        // Intercept response from typebot for response backend data or handling data avoiding user input
-        if (str_contains((string)$response->getBody(), 'get_phone_number')) {
+        /**
+         * @var array $response
+         */
+        $this->response = json_decode($clientResponse->getBody(), true);
 
-            $response = $client->post($url, [
+        // TODO: separate logic and improve 
+        // Intercept response from typebot for response backend data or handling data avoiding user input
+        if (str_contains(json_encode($this->response), 'get_phone_number')) {
+
+            //If the chat not is initialized by interceptor, add session id to continue chat
+            if (!str_contains($url, 'continueChat')) {
+                $this->saveRecordIfNotExist();
+                $url = $this->getUrl();
+            }
+
+            $clientResponse = $client->post($url, [
                 'headers' => [
                     'Content-Type' => 'application/json'
                 ],
@@ -223,9 +240,11 @@ class TypeBotService
                     'message' => $_POST['WaId']
                 ]
             ]);
-            return $response->getBody();
-        }
 
-        return $response->getBody();
+            /**
+             * @var array $response
+             */
+            $this->response = json_decode($clientResponse->getBody(), true);
+        }
     }
 }
