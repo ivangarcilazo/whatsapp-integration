@@ -26,7 +26,7 @@ Route::get('/whatsapp-integration-user-check/{phone_number}', function (Request 
     }
 
     $createdAt = Carbon::parse($user->created_at);
-    $canUseChatbot = $createdAt->addHours(24)->lte(now());
+    $canUseChatbot = now()->greaterThanOrEqualTo($createdAt->copy()->addDays(60));
 
     return response()->json([
         'success' => 200,
