@@ -4,6 +4,7 @@ use Carbon\Carbon;
 use EglobalOneLab\WhatsappIntegration\Http\Controllers\BitrixController;
 use EglobalOneLab\WhatsappIntegration\Http\Controllers\WhatsappIntegrationClearController;
 use EglobalOneLab\WhatsappIntegration\Models\WhatsappIntegration;
+use EglobalOneLab\WhatsappIntegration\Models\WhatsappHistory;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
@@ -25,8 +26,9 @@ Route::get('/whatsapp-integration-user-check/{phone_number}', function (Request 
         ]);
     }
 
+    $userHasMessages = WhatsappHistory::where('whatsapp_id', $phone)->exists();
     $createdAt = Carbon::parse($user->created_at);
-    $canUseChatbot = now()->greaterThanOrEqualTo($createdAt->copy()->addDays(60));
+    $canUseChatbot = now()->greaterThanOrEqualTo($createdAt->copy()->addDays(60)) && !$userHasMessages;
 
     return response()->json([
         'success' => 200,
